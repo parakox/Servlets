@@ -28,8 +28,9 @@ public class UserDao {
         else
             return users.get(id-1);
     }
-    public static void createNewUser(String name,String password,Boolean isAdministrator) throws SQLException {
+    public static void createNewUser(String name,String password,Boolean isAdministrator) throws SQLException, ClassNotFoundException {
         User user = new User(name,users.size()+1,password,isAdministrator);
+        Class.forName("org.h2.Driver");
         Connection connection = DriverManager.getConnection(DatabaseService.PATH);
         connection.createStatement().executeUpdate(String.format("INSERT into USER(NAME,PASSWORD,ADMINISTRATOR) values ('%s', '%s', %b)", user.getName(), user.getPassword(), user.isAdministrator()));
         users.add(user);

@@ -16,7 +16,7 @@ public class UserService {
     public static User getUserById(Integer id){
         return UserDao.getUserById(id);
     }
-    public static void createNewUser(String name,String password,Boolean isAdministrator) throws SQLException {
+    public static void createNewUser(String name,String password,Boolean isAdministrator) throws SQLException, ClassNotFoundException {
         UserDao.createNewUser(name,password,isAdministrator);
     }
 }

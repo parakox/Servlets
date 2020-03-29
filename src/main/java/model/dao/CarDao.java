@@ -1,7 +1,6 @@
 package model.dao;
 
 import model.entity.Car;
-import model.entity.CarNumber;
 import model.entity.User;
 import model.service.DatabaseService;
 import model.service.UserService;
@@ -31,12 +30,13 @@ public class CarDao {
         else
             return cars.get(id-1);
     }
-    public static void createNewCar(CarNumber carNumber) throws SQLException {
-        Car car = new Car(carNumber);
+    public static void createNewCar(String carNumber,String name,User user) throws SQLException, ClassNotFoundException {
+        Car car = new Car(carNumber,name,user);
+        Class.forName("org.h2.Driver");
         Connection connection = DriverManager.getConnection(DatabaseService.PATH);
-        connection.createStatement().executeUpdate(String.format("INSERT into CAR(NUMBER ID) values ('%s')",carNumber.getNumber()));
+        connection.createStatement().executeUpdate(String.format("INSERT into CAR(NUMBER, NAME, USERID) values ('%s', '%s', %d)",carNumber,car.getName(),user.getId()));
         cars.add(car);
-        Integer ownerId = carNumber.getUser().getId();
+        Integer ownerId = car.getUser().getId();
         User owner = UserService.getUserById(ownerId);
         StringBuilder listOfCars =new StringBuilder("[");
         for(int i=0;i<owner.getCars().size();i++){
@@ -46,7 +46,7 @@ public class CarDao {
                 listOfCars.append(owner.getCars().get(i));
         }
         listOfCars.append("]");
-        connection.createStatement().executeQuery(String.format("UPDATE USER SET CARS = '%s' WHERE ID = %d",listOfCars,ownerId));
+        connection.createStatement().executeUpdate(String.format("UPDATE USER SET CARS = '%s' WHERE ID = %d",listOfCars,ownerId));
         owner.getCars().add(car);
     }
 }

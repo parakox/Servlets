@@ -2,7 +2,7 @@ package model.service;
 
 import model.dao.CarDao;
 import model.entity.Car;
-import model.entity.CarNumber;
+import model.entity.User;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,7 +17,7 @@ public class CarService {
     public static Car getCarById(Integer id){
         return CarDao.getCarById(id);
     }
-    public static void createNewCar(CarNumber carNumber) throws SQLException {
-        CarDao.createNewCar(carNumber);
+    public static void createNewCar(String carNumber, String name, User user) throws SQLException, ClassNotFoundException {
+        CarDao.createNewCar(carNumber,name,user);
     }
 }

@@ -25,6 +25,14 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>AccountOfUserController</servlet-name>
-        <url-pattern>/account.jsp</url-pattern>
+        <url-pattern>/account</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AddCarController</servlet-name>
+        <servlet-class>controller.AddCarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddCarController</servlet-name>
+        <url-pattern>/addCar</url-pattern>
     </servlet-mapping>
 </web-app>

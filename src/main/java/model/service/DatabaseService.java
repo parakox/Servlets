@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class DatabaseService {
     public static final String PATH = "jdbc:h2:mem:DB_CLOSE_DELAY=-1";
     public static final String UserID = "idOfUser";
-    public static Boolean checkIfPresent(String nameOfTable,String... args) throws SQLException {
+    public static Boolean checkIfPresent(String nameOfTable,String... args) throws SQLException, ClassNotFoundException {
         String[] comparingParameters = new String[args.length/2];
         String[] tableColumns = new String[args.length/2];
         for(int i=0;i<args.length/2;i++){
@@ -23,6 +23,7 @@ public class DatabaseService {
                 columns.append(tableColumns[i]).append(" ");
         }
         String query = "SELECT "+columns+"FROM "+nameOfTable;
+        Class.forName("org.h2.Driver");
         Connection connection = DriverManager.getConnection(DatabaseService.PATH);
         ResultSet resultSet = connection.createStatement().executeQuery(query);
         while (resultSet.next()) {
