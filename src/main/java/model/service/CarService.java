@@ -20,4 +20,7 @@ public class CarService {
     public static void createNewCar(String carNumber, String name, User user) throws SQLException, ClassNotFoundException {
         CarDao.createNewCar(carNumber,name,user);
     }
+    public static void deleteCar(Car car) throws SQLException {
+        CarDao.deleteCar(car);
+    }
 }

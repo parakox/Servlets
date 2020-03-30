@@ -1,11 +1,13 @@
 package model.service;
 
+import model.entity.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DatabaseService {
+public class UsefulFunctions {
     public static final String PATH = "jdbc:h2:mem:DB_CLOSE_DELAY=-1";
     public static final String UserID = "idOfUser";
     public static Boolean checkIfPresent(String nameOfTable,String... args) throws SQLException, ClassNotFoundException {
@@ -24,7 +26,7 @@ public class DatabaseService {
         }
         String query = "SELECT "+columns+"FROM "+nameOfTable;
         Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(DatabaseService.PATH);
+        Connection connection = DriverManager.getConnection(UsefulFunctions.PATH);
         ResultSet resultSet = connection.createStatement().executeQuery(query);
         while (resultSet.next()) {
             for (int i = 0; i < tableColumns.length; i++) {
@@ -35,5 +37,16 @@ public class DatabaseService {
             }
         }
         return false;
+    }
+    public static StringBuilder createListOfCars(User user){
+        StringBuilder listOfCars = new StringBuilder("[");
+        for(int i=0;i<user.getCars().size();i++){
+            if(i!=user.getCars().size()-1)
+                listOfCars.append(user.getCars().get(i)).append(", ");
+            else
+                listOfCars.append(user.getCars().get(i));
+        }
+        listOfCars.append("]");
+        return listOfCars;
     }
 }

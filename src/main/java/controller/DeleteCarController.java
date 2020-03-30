@@ -10,32 +10,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class AddCarController extends HttpServlet {
+public class DeleteCarController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(getServletContext().getAttribute(UsefulFunctions.UserID)==null)
             resp.sendRedirect("index.jsp");
         Integer id = (Integer) getServletContext().getAttribute(UsefulFunctions.UserID);
-        String number = req.getParameter("carNumber");
-        String name = req.getParameter("carName");
         User user = UserService.getUserById(id);
-        try {
-            Class.forName("org.h2.Driver");
-            Connection connection = DriverManager.getConnection(UsefulFunctions.PATH);
-            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS CAR(ID bigint auto_increment , NUMBER varchar(30), NAME varchar(30), USERID int)");
-            if(!UsefulFunctions.checkIfPresent("CAR",number,"NUMBER")){
-                CarService.createNewCar(number,name,user);
+        String carNumber = req.getParameter("carNumber");
+        for(int i=0;i<user.getCars().size();i++){
+            if(user.getCars().get(i).getCarNumber().equals(carNumber)) {
+                try {
+                    CarService.deleteCar(user.getCars().get(i));
+                    break;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-            resp.sendRedirect("account");
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
+        resp.sendRedirect("account");
     }
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

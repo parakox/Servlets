@@ -2,7 +2,7 @@ package controller;
 
 import model.entity.Car;
 import model.entity.User;
-import model.service.DatabaseService;
+import model.service.UsefulFunctions;
 import model.service.UserService;
 
 import javax.servlet.ServletException;
@@ -17,9 +17,9 @@ import java.util.stream.Stream;
 public class AccountOfUserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(getServletContext().getAttribute(DatabaseService.UserID)==null)
+        if(getServletContext().getAttribute(UsefulFunctions.UserID)==null)
             resp.sendRedirect("index.jsp");
-        Integer id = (Integer) getServletContext().getAttribute(DatabaseService.UserID);
+        Integer id = (Integer) getServletContext().getAttribute(UsefulFunctions.UserID);
         User user = UserService.getUserById(id);
         List<Car> cars = user.getCars();
         String name = user.getName();
@@ -40,6 +40,10 @@ public class AccountOfUserController extends HttpServlet {
         out.println("<br>Car Number: <input type=text name=carNumber>");
         out.println("<br>Car Name: <input type=text name=carName>");
         out.println("<br><input type=submit name=action value=Create new car>");
+        out.println("</form>");
+        out.println("<form action=deleteCar method=post>");
+        out.println("<br>Car Number: <input type=text name=carNumber>");
+        out.println("<br><input type=submit name=action value=Delete car>");
         out.println("</form>");
         out.println("</body>");
         out.println("</html>");

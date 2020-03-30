@@ -1,7 +1,7 @@
 package controller;
 import com.google.gson.Gson;
 import model.entity.ParkingPlace;
-import model.service.DatabaseService;
+import model.service.UsefulFunctions;
 import model.service.ParkingPlaceService;
 
 import javax.servlet.ServletException;
@@ -15,7 +15,7 @@ import java.util.List;
 public class ParkingPlaceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(getServletContext().getAttribute(DatabaseService.UserID)==null)
+        if(getServletContext().getAttribute(UsefulFunctions.UserID)==null)
             resp.sendRedirect("index.jsp");
         PrintWriter printWriter = resp.getWriter();
         String id = req.getParameter("id");

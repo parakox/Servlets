@@ -35,4 +35,12 @@
         <servlet-name>AddCarController</servlet-name>
         <url-pattern>/addCar</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteCarController</servlet-name>
+        <servlet-class>controller.DeleteCarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteCarController</servlet-name>
+        <url-pattern>/deleteCar</url-pattern>
+    </servlet-mapping>
 </web-app>
