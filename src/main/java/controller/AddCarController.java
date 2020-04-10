@@ -22,13 +22,10 @@ public class AddCarController extends HttpServlet {
         Integer id = (Integer) getServletContext().getAttribute(UsefulFunctions.UserID);
         String number = req.getParameter("carNumber");
         String name = req.getParameter("carName");
-        User user = UserService.getUserById(id);
         try {
-            Class.forName("org.h2.Driver");
-            Connection connection = DriverManager.getConnection(UsefulFunctions.PATH);
-            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS CAR(ID bigint auto_increment , NUMBER varchar(30), NAME varchar(30), USERID int)");
-            if(!UsefulFunctions.checkIfPresent("CAR",number,"NUMBER")){
-                CarService.createNewCar(number,name,user);
+            User user = UserService.getUserById(id);
+            if(!number.equals("null") && name.length()>0 && name.length()<=30 && number.length()>0 && number.length()<=8 && !UsefulFunctions.checkIfPresent("CAR",number,"NUMBER")){
+                CarService.createNewCar(number,name,false,user.getId(),-1);
             }
             resp.sendRedirect("account");
         } catch (SQLException | ClassNotFoundException e) {

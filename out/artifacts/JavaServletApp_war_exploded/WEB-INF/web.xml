@@ -43,4 +43,20 @@
         <servlet-name>DeleteCarController</servlet-name>
         <url-pattern>/deleteCar</url-pattern>
     </servlet-mapping>
+    <servlet>
+    <servlet-name>ParkCarController</servlet-name>
+    <servlet-class>controller.ParkCarController</servlet-class>
+</servlet>
+    <servlet-mapping>
+        <servlet-name>ParkCarController</servlet-name>
+        <url-pattern>/parkCar</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>UnparkCarController</servlet-name>
+        <servlet-class>controller.UnparkCarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UnparkCarController</servlet-name>
+        <url-pattern>/unparkCar</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -12,9 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
-public class DeleteCarController extends HttpServlet {
+public class UnparkCarController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(getServletContext().getAttribute(UsefulFunctions.UserID)==null)
@@ -23,23 +22,15 @@ public class DeleteCarController extends HttpServlet {
         try {
             User user = UserService.getUserById(id);
             String carNumber = req.getParameter("carNumber");
-            List<Car> cars = user.getCars();
-            for(int i = 0; i<cars.size(); i++){
-                if(cars.get(i).getCarNumber().equals(carNumber)) {
-                    try {
-                        CarService.deleteCar(cars.get(i));
-                    } catch (SQLException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                }
+            Car car = CarService.getCarByCarNumber(carNumber);
+            if(car!=null && car.getUserId().equals(user.getId()) && car.isParked()){
+                CarService.unparkCar(car);
             }
-            resp.sendRedirect("account");
+            resp.sendRedirect("parking");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.sendRedirect("index.jsp");

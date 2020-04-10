@@ -1,7 +1,11 @@
 package controller;
 
+import model.entity.ParkingPlace;
+import model.service.CarService;
+import model.service.ParkingPlaceService;
 import model.service.UsefulFunctions;
 import model.service.UserService;
+import org.h2.engine.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,16 +19,16 @@ public class SignInSignUpController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
         try {
-            Class.forName("org.h2.Driver");
-            Connection connection = DriverManager.getConnection(UsefulFunctions.PATH);
             String name = req.getParameter("name").trim();
             String password = req.getParameter("password").trim();
-            connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS USER(ID bigint auto_increment , NAME varchar(30), PASSWORD varchar(30), ADMINISTRATOR bool, CARS array)");
+            UserService.createTableIfNotExists();
+            ParkingPlaceService.createTableIfNotExists();
+            CarService.createTableIfNotExists();
             if(action.equals("Log in")){
                 if(UsefulFunctions.checkIfPresent("USER",name,password,"NAME","PASSWORD")) {
                     int id = 0;
-                    for(int i=0;i<UserService.getUsers().size();i++){
-                        if(UserService.getUsers().get(i).getName().equals(name)){
+                    for(int i=0;i<UserService.getAllUsers().size();i++){
+                        if(UserService.getAllUsers().get(i).getName().equals(name)){
                             id = i+1;
                             break;
                         }
@@ -38,7 +42,7 @@ public class SignInSignUpController extends HttpServlet {
                     resp.sendRedirect("index.jsp");
                 else{
                     UserService.createNewUser(name,password,false);
-                    getServletContext().setAttribute(UsefulFunctions.UserID, UserService.getUsers().size());
+                    getServletContext().setAttribute(UsefulFunctions.UserID, UserService.getAllUsers().size());
                     resp.sendRedirect("account");
                 }
             }

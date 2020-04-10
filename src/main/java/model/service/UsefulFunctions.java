@@ -38,15 +38,4 @@ public class UsefulFunctions {
         }
         return false;
     }
-    public static StringBuilder createListOfCars(User user){
-        StringBuilder listOfCars = new StringBuilder("[");
-        for(int i=0;i<user.getCars().size();i++){
-            if(i!=user.getCars().size()-1)
-                listOfCars.append(user.getCars().get(i)).append(", ");
-            else
-                listOfCars.append(user.getCars().get(i));
-        }
-        listOfCars.append("]");
-        return listOfCars;
-    }
 }

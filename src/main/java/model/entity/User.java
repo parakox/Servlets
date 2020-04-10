@@ -10,12 +10,12 @@ public class User {
     private Integer id;
     private Boolean administrator;
     private List<Car> cars;
-    public User(String name, Integer id,String password,Boolean administrator){
+    public User(String name, Integer id,String password,Boolean administrator,List<Car> cars){
         this.name = name;
         this.id = id;
         this.password = password;
         this.administrator = administrator;
-        this.cars = new ArrayList<>();
+        this.cars = cars;
     }
 
     public String getName() {
@@ -57,5 +57,14 @@ public class User {
     public void setCars(List<Car> cars) {
         this.cars = cars;
     }
-
+    public StringBuilder createListOfCars(){
+        StringBuilder listOfCars = new StringBuilder();
+        for(int i=0;i<this.getCars().size();i++){
+            if(i!=this.getCars().size()-1)
+                listOfCars.append(this.getCars().get(i)).append(",");
+            else
+                listOfCars.append(this.getCars().get(i));
+        }
+        return listOfCars;
+    }
 }

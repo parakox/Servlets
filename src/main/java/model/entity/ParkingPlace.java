@@ -4,11 +4,9 @@ import model.entity.Car;
 
 public class ParkingPlace {
     private Car car;
-    private Double duration;
     private Boolean empty;
-    public ParkingPlace(Car car, Double duration,Boolean empty){
+    public ParkingPlace(Car car,Boolean empty){
         this.car=car;
-        this.duration=duration;
         this.empty = empty;
     }
 
@@ -18,14 +16,6 @@ public class ParkingPlace {
 
     public void setCar(Car car) {
         this.car = car;
-    }
-
-    public Double getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Double duration) {
-        this.duration = duration;
     }
 
     public Boolean isEmpty() {
