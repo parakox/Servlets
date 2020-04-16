@@ -1,11 +1,11 @@
 package controller;
 
-import model.entity.ParkingPlace;
 import model.service.CarService;
 import model.service.ParkingPlaceService;
-import model.service.UsefulFunctions;
+import model.dao.Dao;
 import model.service.UserService;
-import org.h2.engine.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,8 +15,9 @@ import java.io.IOException;
 import java.sql.*;
 
 public class SignInSignUpController extends HttpServlet {
+    final static Logger logger = LogManager.getLogger(SignInSignUpController.class);
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String action = req.getParameter("action");
         try {
             String name = req.getParameter("name").trim();
@@ -25,7 +26,7 @@ public class SignInSignUpController extends HttpServlet {
             ParkingPlaceService.createTableIfNotExists();
             CarService.createTableIfNotExists();
             if(action.equals("Log in")){
-                if(UsefulFunctions.checkIfPresent("USER",name,password,"NAME","PASSWORD")) {
+                if(Dao.checkIfPresent("USER",name,password,"NAME","PASSWORD")) {
                     int id = 0;
                     for(int i=0;i<UserService.getAllUsers().size();i++){
                         if(UserService.getAllUsers().get(i).getName().equals(name)){
@@ -33,21 +34,27 @@ public class SignInSignUpController extends HttpServlet {
                             break;
                         }
                     }
-                    getServletContext().setAttribute(UsefulFunctions.UserID, id);
+                    getServletContext().setAttribute(Dao.USER_ID, id);
                     resp.sendRedirect("account");
-                }else
+                    logger.info("user "+id+" logged in");
+                }else {
                     resp.sendRedirect("index.jsp");
+                    logger.info("couldn't log in with password: "+ password+" name: "+name);
+                }
             }else if(action.equals("Register")){
-                if(name.length()<6 || password.length()<6 || name.length()>30 || password.length()>30 || UsefulFunctions.checkIfPresent("USER",name,"NAME"))
+                if(name.length()<6 || password.length()<6 || name.length()>30 || password.length()>30 || Dao.checkIfPresent("USER",name,"NAME")) {
                     resp.sendRedirect("index.jsp");
-                else{
-                    UserService.createNewUser(name,password,false);
-                    getServletContext().setAttribute(UsefulFunctions.UserID, UserService.getAllUsers().size());
+                    logger.info("couldn't sign up with password: "+ password+" name: "+name);
+                }else{
+                    UserService.createNewUser(name,password,0,false);
+                    getServletContext().setAttribute(Dao.USER_ID, UserService.getAllUsers().size());
                     resp.sendRedirect("account");
+                    logger.info("user "+UserService.getAllUsers().size()+" registered and logged");
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            resp.sendRedirect("index.jsp");
+            logger.error("DB exception at logging or signing up");
         }
     }
 

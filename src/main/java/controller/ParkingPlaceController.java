@@ -1,8 +1,9 @@
 package controller;
-import com.google.gson.Gson;
 import model.entity.ParkingPlace;
-import model.service.UsefulFunctions;
+import model.dao.Dao;
 import model.service.ParkingPlaceService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,14 +13,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class ParkingPlaceController extends HttpServlet {
+    final static Logger logger = LogManager.getLogger(ParkingPlaceController.class);
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(getServletContext().getAttribute(UsefulFunctions.UserID)==null)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if(getServletContext().getAttribute(Dao.USER_ID)==null) {
             resp.sendRedirect("index.jsp");
+        }
         PrintWriter out = resp.getWriter();
+        Integer id = (Integer) getServletContext().getAttribute(Dao.USER_ID);
         try {
             List<ParkingPlace> parkingPlaces = ParkingPlaceService.getAllParkingPlaces();
             out.println("<html>");
@@ -46,7 +49,7 @@ public class ParkingPlaceController extends HttpServlet {
             out.println("</body>");
             out.println("</html>");
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error("DB exception, user "+id);
         }
     }
 

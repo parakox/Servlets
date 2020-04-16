@@ -14,8 +14,11 @@ public class UserService {
     public static User getUserById(Integer id) throws SQLException, ClassNotFoundException {
         return UserDao.getUserById(id);
     }
-    public static void createNewUser(String name,String password,Boolean administrator) throws SQLException, ClassNotFoundException {
-        UserDao.createNewUser(name,password,administrator);
+    public static void setUser(User user) throws SQLException, ClassNotFoundException {
+        UserDao.setUser(user);
+    }
+    public static void createNewUser(String name,String password,Integer reputation,Boolean administrator) throws SQLException, ClassNotFoundException {
+        UserDao.createNewUser(name,password,reputation,administrator);
     }
     public static void createTableIfNotExists() throws SQLException, ClassNotFoundException {
         UserDao.createTableIfNotExists();

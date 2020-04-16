@@ -46,7 +46,7 @@
     <servlet>
     <servlet-name>ParkCarController</servlet-name>
     <servlet-class>controller.ParkCarController</servlet-class>
-</servlet>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ParkCarController</servlet-name>
         <url-pattern>/parkCar</url-pattern>

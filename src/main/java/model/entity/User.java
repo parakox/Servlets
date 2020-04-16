@@ -4,15 +4,19 @@ import model.entity.Car;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
-    private String name,password;
+    private String name;
+    private String password;
     private Integer id;
+    private Integer reputation;
     private Boolean administrator;
     private List<Car> cars;
-    public User(String name, Integer id,String password,Boolean administrator,List<Car> cars){
+    public User(String name, Integer id,Integer reputation,String password,Boolean administrator,List<Car> cars){
         this.name = name;
         this.id = id;
+        this.reputation = reputation;
         this.password = password;
         this.administrator = administrator;
         this.cars = cars;
@@ -34,37 +38,40 @@ public class User {
         this.id = id;
     }
 
-    public String getPassword() {
-        return password;
+    public Integer getReputation() {
+        return reputation;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setReputation(Integer reputation) {
+        this.reputation = reputation;
+    }
+
+    public String getPassword(){
+        return password;
     }
 
     public Boolean isAdministrator() {
         return administrator;
     }
 
-    public void setAdministrator(Boolean administrator) {
-        this.administrator = administrator;
-    }
-
     public List<Car> getCars() {
         return cars;
     }
 
-    public void setCars(List<Car> cars) {
-        this.cars = cars;
-    }
-    public StringBuilder createListOfCars(){
-        StringBuilder listOfCars = new StringBuilder();
-        for(int i=0;i<this.getCars().size();i++){
-            if(i!=this.getCars().size()-1)
-                listOfCars.append(this.getCars().get(i)).append(",");
-            else
-                listOfCars.append(this.getCars().get(i));
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        return listOfCars;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

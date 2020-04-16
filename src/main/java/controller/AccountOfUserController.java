@@ -1,11 +1,11 @@
 package controller;
 
-import model.dao.UserDao;
 import model.entity.Car;
 import model.entity.User;
-import model.service.CarService;
-import model.service.UsefulFunctions;
+import model.dao.Dao;
 import model.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,11 +17,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class AccountOfUserController extends HttpServlet {
+    final static Logger logger = LogManager.getLogger(AccountOfUserController.class);
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(getServletContext().getAttribute(UsefulFunctions.UserID)==null)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if(getServletContext().getAttribute(Dao.USER_ID)==null) {
             resp.sendRedirect("index.jsp");
-        Integer id = (Integer) getServletContext().getAttribute(UsefulFunctions.UserID);
+        }
+        Integer id = (Integer) getServletContext().getAttribute(Dao.USER_ID);
         try {
             User user = UserService.getUserById(id);
             List<Car> cars = user.getCars();
@@ -34,7 +36,7 @@ public class AccountOfUserController extends HttpServlet {
             out.println("<body>");
             out.println("<p>Your name: " + name + "</p>");
             out.println("<p>Your id :" + id + "</p>");
-            out.println("<p>Your cars :" + "</p>");
+            out.println("<p>Your cars :</p>");
             out.println("<p>[");
             for (Car i : cars) {
                 out.println(i.toString() + "; ");
@@ -52,10 +54,11 @@ public class AccountOfUserController extends HttpServlet {
             out.println("<br>Car Number: <input type=text name=carNumber>");
             out.println("<br><input type=submit name=action value=Delete car>");
             out.println("</form>");
+            out.println("<form method = get action=parking><input type=submit value=Parking></form>");
             out.println("</body>");
             out.println("</html>");
         }catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error("DB exception, user "+id);
         }
     }
 }
