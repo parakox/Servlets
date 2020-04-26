@@ -1,20 +1,17 @@
-package model.entity;
+package model.entity.entity;
 
 import java.util.Map;
 import java.util.Objects;
 
 public class Car {
-    public static final Map<String,Integer> PRICE= Map.of("Mercedes",1000,"Bmv",500,"Zaporozhets",9999);
 
     private String carNumber;
     private String name;
-    private Boolean parked;
     private Integer userId;
     private Integer parkingPlaceId;
-    public Car(String carNumber,String name,Boolean parked,Integer userId,Integer parkingPlaceId){
+    public Car(String carNumber,String name,Integer userId,Integer parkingPlaceId){
         this.carNumber=carNumber;
         this.name = name;
-        this.parked = parked;
         this.userId = userId;
         this.parkingPlaceId = parkingPlaceId;
     }
@@ -31,13 +28,6 @@ public class Car {
         this.name = name;
     }
 
-    public Boolean isParked() {
-        return parked;
-    }
-
-    public void setParked(Boolean parked) {
-        this.parked = parked;
-    }
 
     public Integer getUserId() {
         return userId;
@@ -53,11 +43,9 @@ public class Car {
 
     @Override
     public String toString() {
-        return "name : "+this.name+
-                ", car number : "+this.carNumber+
-                ", parked : "+this.parked +
-                (this.parked ? ", parking place id : " +
-                        this.parkingPlaceId : "");
+        return "name : "+name+
+                ", car number : "+carNumber+
+                 ", parking place id : " + parkingPlaceId;
     }
 
     @Override

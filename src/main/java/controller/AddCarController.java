@@ -1,8 +1,10 @@
 package controller;
 
-import model.entity.User;
+import model.entity.entity.Message;
+import model.entity.entity.User;
+import model.entity.exception.InvalidPassedArgumentException;
 import model.service.CarService;
-import model.dao.Dao;
+import model.entity.сonstant.Constants;
 import model.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,24 +19,34 @@ import java.sql.SQLException;
 public class AddCarController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(AddCarController.class);
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if(getServletContext().getAttribute(Dao.USER_ID)==null) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        if(getServletContext().getAttribute(Constants.USER_ID)==null) {
             resp.sendRedirect("index.jsp");
-        }        Integer id = (Integer) getServletContext().getAttribute(Dao.USER_ID);
-        String number = req.getParameter("carNumber");
-        String name = req.getParameter("carName");
-        try {
-            User user = UserService.getUserById(id);
-            if(!number.equals("null") && name.length()>0 && name.length()<=30 && number.length()>0 && number.length()<=8 && !Dao.checkIfPresent("CAR",number,"NUMBER")){
-                CarService.createNewCar(number,name,false,user.getId(),-1);
-                logger.info("new car with number "+number+" created, user "+id);
-            }else{
-                logger.info("couldn't create car with number "+number+", user "+id);
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            logger.error("DB exception, user "+id);
         }
-        resp.sendRedirect("account");
+        Integer id = (Integer) getServletContext().getAttribute(Constants.USER_ID);
+        String number = req.getParameter("carNumber").trim();
+        String name = req.getParameter("carName").trim();
+        try{
+            User user = UserService.getUserById(id);
+            if(CarService.getCarByCarNumber(number)!=null || number.equals("null")){
+                throw new InvalidPassedArgumentException(String.format(Message.CAR_NUMBER_ENGAGED.getMessage(),number));
+            }
+            if(name.length()<6 || name.length()>30){
+                throw new InvalidPassedArgumentException(String.format(Message.NAME_NOT_MATCHES_LENGTH.getMessage(),name));
+            }
+            if(number.length()==0 || number.length()>8){
+                throw new InvalidPassedArgumentException(String.format(Message.CAR_NUMBER_NOT_MATCHES_LENGTH.getMessage(),number));
+            }
+            CarService.createNewCar(number,name,user.getId(),null);
+            logger.info("new car with number "+number+" created, user "+id);
+            resp.sendRedirect("account");
+        }catch (SQLException e) {
+            logger.error("Exception, user "+id+" : "+ e.getMessage());
+        }catch(InvalidPassedArgumentException e){
+            logger.info("Exception, user "+id+" : "+ e.getMessage());
+            req.setAttribute("error",e.getMessage());
+            req.getRequestDispatcher("error").forward(req,resp);
+        }
     }
 
     @Override

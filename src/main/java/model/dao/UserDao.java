@@ -1,7 +1,8 @@
 package model.dao;
 
-import model.entity.Car;
-import model.entity.User;
+import model.entity.entity.Car;
+import model.entity.сonstant.Constants;
+import model.entity.entity.User;
 import model.service.CarService;
 
 import java.sql.*;
@@ -9,47 +10,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
-    public static List<User> getAllUsers() throws ClassNotFoundException, SQLException {
+    public static List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(Dao.PATH);
+        Connection connection = DriverManager.getConnection(Constants.DB_PATH);
         ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM USER");
         while(resultSet.next()){
             users.add(getUserFromResultSet(resultSet));
         }
         return users;
     }
-    public static User getUserById(Integer id) throws ClassNotFoundException, SQLException {
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(Dao.PATH);
+    public static User getUserById(Integer id) throws SQLException {
+        Connection connection = DriverManager.getConnection(Constants.DB_PATH);
         ResultSet resultSet = connection.createStatement().executeQuery(String.format("SELECT * FROM USER WHERE ID = %d",id));
         if(resultSet.next()){
             return getUserFromResultSet(resultSet);
         }
         return null;
     }
-    public static void setUser(User user) throws ClassNotFoundException, SQLException{
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(Dao.PATH);
-        connection.createStatement().executeUpdate(String.format("UPDATE USER SET REPUTATION = %d, NAME = '%s', PASSWORD = '%s', ADMINISTRATOR = %b WHERE ID = %d",user.getReputation(),user.getName(),user.getPassword(),user.isAdministrator(),user.getId()));
+    public static User getUserByName(String name) throws SQLException {
+        Connection connection = DriverManager.getConnection(Constants.DB_PATH);
+        ResultSet resultSet = connection.createStatement().executeQuery(String.format("SELECT * FROM USER WHERE NAME = '%s'",name));
+        if(resultSet.next()){
+            return getUserFromResultSet(resultSet);
+        }
+        return null;
     }
-    public static void createNewUser(String name,String password,Integer reputation,Boolean administrator) throws SQLException, ClassNotFoundException {
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(Dao.PATH);
-        connection.createStatement().executeUpdate(String.format("INSERT into USER(REPUTATION,NAME,PASSWORD,ADMINISTRATOR) values (%d, '%s', '%s', %b)", reputation, name, password, administrator));
+    public static User getUserByNameAndPassword(String name, String password) throws SQLException{
+        Connection connection = DriverManager.getConnection(Constants.DB_PATH);
+        ResultSet resultSet = connection.createStatement().executeQuery(String.format("SELECT * FROM USER WHERE NAME = '%s' AND PASSWORD = '%s'",name,password));
+        if(resultSet.next()){
+            return getUserFromResultSet(resultSet);
+        }
+        return null;
     }
-    public static void createTableIfNotExists() throws ClassNotFoundException, SQLException {
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(Dao.PATH);
-        connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS USER(ID bigint auto_increment,REPUTATION int, NAME varchar(30), PASSWORD varchar(30), ADMINISTRATOR bool)");
+    public static void setUser(User user) throws SQLException{
+        Connection connection = DriverManager.getConnection(Constants.DB_PATH);
+        connection.createStatement().executeUpdate(String.format("UPDATE USER SET NAME = '%s', PASSWORD = '%s', WHERE ID = %d",user.getName(),user.getPassword(),user.getId()));
     }
-    private static User getUserFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
+    public static void createNewUser(String name,String password) throws SQLException {
+        Connection connection = DriverManager.getConnection(Constants.DB_PATH);
+        connection.createStatement().executeUpdate(String.format("INSERT into USER(NAME,PASSWORD) values ('%s', '%s')", name, password));
+    }
+    public static void createTableIfNotExists() throws SQLException {
+        Connection connection = DriverManager.getConnection(Constants.DB_PATH);
+        connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS USER(ID bigint auto_increment, NAME varchar(30), PASSWORD varchar(30))");
+    }
+    private static User getUserFromResultSet(ResultSet resultSet) throws SQLException {
         String name = resultSet.getString("NAME");
         String password = resultSet.getString("PASSWORD");
         Integer id = resultSet.getInt("ID");
-        Integer reputation = resultSet.getInt("REPUTATION");
-        Boolean administrator = resultSet.getBoolean("ADMINISTRATOR");
         List<Car> cars = CarService.getCarsByUserId(id);
-        return new User(name, id,reputation, password, administrator, cars);
+        return new User(name, id, password, cars);
     }
 }

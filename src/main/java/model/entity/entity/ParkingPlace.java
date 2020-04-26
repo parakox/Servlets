@@ -1,16 +1,12 @@
-package model.entity;
-
-import model.entity.Car;
+package model.entity.entity;
 
 import java.util.Objects;
 
 public class ParkingPlace {
     private Car car;
-    private Boolean empty;
     private Integer id;
-    public ParkingPlace(Car car,Boolean empty,Integer id){
+    public ParkingPlace(Car car,Integer id){
         this.car = car;
-        this.empty = empty;
         this.id = id;
     }
 
@@ -22,9 +18,6 @@ public class ParkingPlace {
         this.car = car;
     }
 
-    public Boolean isEmpty() {
-        return empty;
-    }
     public Integer getId(){
         return id;
     }

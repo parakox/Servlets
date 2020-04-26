@@ -1,8 +1,11 @@
 package controller;
 
+import model.entity.entity.Message;
+import model.entity.entity.User;
+import model.entity.exception.InvalidPassedArgumentException;
 import model.service.CarService;
 import model.service.ParkingPlaceService;
-import model.dao.Dao;
+import model.entity.сonstant.Constants;
 import model.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,49 +20,50 @@ import java.sql.*;
 public class SignInSignUpController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(SignInSignUpController.class);
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String action = req.getParameter("action");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
+            String action = req.getParameter("action");
             String name = req.getParameter("name").trim();
             String password = req.getParameter("password").trim();
+            Class.forName(Constants.JDBC_DRIVER);
             UserService.createTableIfNotExists();
             ParkingPlaceService.createTableIfNotExists();
             CarService.createTableIfNotExists();
             if(action.equals("Log in")){
-                if(Dao.checkIfPresent("USER",name,password,"NAME","PASSWORD")) {
-                    int id = 0;
-                    for(int i=0;i<UserService.getAllUsers().size();i++){
-                        if(UserService.getAllUsers().get(i).getName().equals(name)){
-                            id = i+1;
-                            break;
-                        }
-                    }
-                    getServletContext().setAttribute(Dao.USER_ID, id);
-                    resp.sendRedirect("account");
-                    logger.info("user "+id+" logged in");
-                }else {
-                    resp.sendRedirect("index.jsp");
-                    logger.info("couldn't log in with password: "+ password+" name: "+name);
+                User user = UserService.getUserByNameAndPassword(name,password);
+                if(user==null){
+                    throw new InvalidPassedArgumentException(String.format(Message.USER_WITH_CREDENTIALS_NOT_EXISTS.getMessage(),name,password));
                 }
+                getServletContext().setAttribute(Constants.USER_ID, user.getId());
+                logger.info("user "+user.getId()+" logged in");
+                resp.sendRedirect("account");
             }else if(action.equals("Register")){
-                if(name.length()<6 || password.length()<6 || name.length()>30 || password.length()>30 || Dao.checkIfPresent("USER",name,"NAME")) {
-                    resp.sendRedirect("index.jsp");
-                    logger.info("couldn't sign up with password: "+ password+" name: "+name);
-                }else{
-                    UserService.createNewUser(name,password,0,false);
-                    getServletContext().setAttribute(Dao.USER_ID, UserService.getAllUsers().size());
-                    resp.sendRedirect("account");
-                    logger.info("user "+UserService.getAllUsers().size()+" registered and logged");
+                if(name.length()<6 || name.length()>30){
+                    throw new InvalidPassedArgumentException(String.format(Message.NAME_NOT_MATCHES_LENGTH.getMessage(),name));
                 }
+                if(password.length()<6 || password.length()>30){
+                    throw new InvalidPassedArgumentException(String.format(Message.PASSWORD_NOT_MATCHES_LENGTH.getMessage(),password));
+                }
+                if(UserService.getUserByName(name)!=null) {
+                    throw new InvalidPassedArgumentException(String.format(Message.NAME_ENGAGED.getMessage(),name));
+                }
+                UserService.createNewUser(name,password);
+                getServletContext().setAttribute(Constants.USER_ID, UserService.getAllUsers().size());
+                logger.info("user "+UserService.getAllUsers().size()+" registered and logged");
+                resp.sendRedirect("account");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        }catch (SQLException | ClassNotFoundException e) {
+            logger.error("Exception at logging or signing up "+ e.getMessage());
             resp.sendRedirect("index.jsp");
-            logger.error("DB exception at logging or signing up");
+        }catch(InvalidPassedArgumentException e){
+            logger.info("Exception : "+ e.getMessage());
+            req.setAttribute("error",e.getMessage());
+            req.getRequestDispatcher("error").forward(req,resp);
         }
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.sendRedirect("index.jsp");
     }
 }
