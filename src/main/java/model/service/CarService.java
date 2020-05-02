@@ -7,22 +7,36 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class CarService {
-    public static Car getCarByCarNumber(String carNumber) throws SQLException {
-        return CarDao.getCarByCarNumber(carNumber);
+
+    private static CarService carService = new CarService();
+
+    public static CarService getCarService() {
+        return carService;
     }
-    public static void setCar(Car car) throws SQLException {
-        CarDao.setCar(car);
+
+    private CarService(){
+
     }
-    public static List<Car> getCarsByUserId(Integer id) throws SQLException {
-        return CarDao.getCarsByUserId(id);
+
+
+    private CarDao carDao = CarDao.getCarDao();
+
+    public Car getCarByCarNumber(String carNumber) throws SQLException {
+        return carDao.getCarByCarNumber(carNumber);
     }
-    public static void createNewCar(String carNumber, String name,Integer userId,Integer parkingPlaceId) throws SQLException {
-        CarDao.createNewCar(carNumber,name,userId,parkingPlaceId);
+    public void setCar(Car car) throws SQLException {
+        carDao.setCar(car);
     }
-    public static void deleteCar(Car car) throws SQLException{
-        CarDao.deleteCar(car);
+    public List<Car> getCarsByUserId(Integer id) throws SQLException {
+        return carDao.getCarsByUserId(id);
     }
-    public static void createTableIfNotExists() throws SQLException {
-        CarDao.createTableIfNotExists();
+    public void createNewCar(String carNumber, String name,Integer userId,Integer parkingPlaceId) throws SQLException {
+        carDao.createNewCar(carNumber,name,userId,parkingPlaceId);
+    }
+    public void deleteCar(Car car) throws SQLException{
+        carDao.deleteCar(car);
+    }
+    public void createTableIfNotExists() throws SQLException {
+        carDao.createTableIfNotExists();
     }
 }

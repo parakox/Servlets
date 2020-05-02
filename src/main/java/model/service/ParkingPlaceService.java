@@ -8,16 +8,28 @@ import java.util.List;
 
 public class ParkingPlaceService {
 
-    public static List<ParkingPlace> getAllParkingPlaces() throws SQLException{
-        return ParkingPlaceDao.getAllParkingPlaces();
+    private static ParkingPlaceService parkingPlaceService = new ParkingPlaceService();
+
+    public static ParkingPlaceService getParkingPlaceService() {
+        return parkingPlaceService;
     }
-    public static ParkingPlace getParkingPlaceById(Integer id) throws SQLException {
-        return ParkingPlaceDao.getParkingPlaceById(id);
+
+    private ParkingPlaceService(){
+
     }
-    public static void setParkingPlace(ParkingPlace parkingPlace) throws SQLException {
-        ParkingPlaceDao.setParkingPlace(parkingPlace);
+
+    private ParkingPlaceDao parkingPlaceDao = ParkingPlaceDao.getParkingPlace();
+
+    public List<ParkingPlace> getAllParkingPlaces() throws SQLException{
+        return parkingPlaceDao.getAllParkingPlaces();
     }
-    public static void createTableIfNotExists() throws SQLException {
-        ParkingPlaceDao.createTableIfNotExists();
+    public ParkingPlace getParkingPlaceById(Integer id) throws SQLException {
+        return parkingPlaceDao.getParkingPlaceById(id);
+    }
+    public void setParkingPlace(ParkingPlace parkingPlace) throws SQLException {
+        parkingPlaceDao.setParkingPlace(parkingPlace);
+    }
+    public void createTableIfNotExists() throws SQLException {
+        parkingPlaceDao.createTableIfNotExists();
     }
 }

@@ -21,6 +21,13 @@ import java.sql.SQLException;
 
 public class UnparkCarController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(UnparkCarController.class);
+
+    private UserService userService = UserService.getUserService();
+
+    private CarService carService = CarService.getCarService();
+
+    private ParkingPlaceService parkingPlaceService = ParkingPlaceService.getParkingPlaceService();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if(getServletContext().getAttribute(Constants.USER_ID)==null) {
@@ -28,18 +35,18 @@ public class UnparkCarController extends HttpServlet {
         }
         Integer id = (Integer) getServletContext().getAttribute(Constants.USER_ID);
         try {
-            User user = UserService.getUserById(id);
+            User user = userService.getUserById(id);
             String carNumber = req.getParameter("carNumber").trim();
-            Car car = CarService.getCarByCarNumber(carNumber);
+            Car car = carService.getCarByCarNumber(carNumber);
             if(car==null || !car.getUserId().equals(user.getId())){
                 throw new InvalidPassedArgumentException(String.format(Message.CAR_NOT_BELONGS_TO_YOU.getMessage(),carNumber));
             }
             if(car.getParkingPlaceId()==0){
                 throw new InvalidPassedArgumentException(String.format(Message.CAR_NOT_PARKED.getMessage(),carNumber));
             }
-            ParkingPlaceService.setParkingPlace(new ParkingPlace(null,car.getParkingPlaceId()));
+            parkingPlaceService.setParkingPlace(new ParkingPlace(null,car.getParkingPlaceId()));
             car.setParkingPlaceId(0);
-            CarService.setCar(car);
+            carService.setCar(car);
             logger.info("car with number "+carNumber+" unparked, user "+id);
             resp.sendRedirect("parking");
         } catch (SQLException e) {

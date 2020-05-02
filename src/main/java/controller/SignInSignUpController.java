@@ -19,6 +19,13 @@ import java.sql.*;
 
 public class SignInSignUpController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(SignInSignUpController.class);
+
+    private UserService userService = UserService.getUserService();
+
+    private CarService carService = CarService.getCarService();
+
+    private ParkingPlaceService parkingPlaceService = ParkingPlaceService.getParkingPlaceService();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
@@ -26,11 +33,11 @@ public class SignInSignUpController extends HttpServlet {
             String name = req.getParameter("name").trim();
             String password = req.getParameter("password").trim();
             Class.forName(Constants.JDBC_DRIVER);
-            UserService.createTableIfNotExists();
-            ParkingPlaceService.createTableIfNotExists();
-            CarService.createTableIfNotExists();
+            userService.createTableIfNotExists();
+            parkingPlaceService.createTableIfNotExists();
+            carService.createTableIfNotExists();
             if(action.equals("Log in")){
-                User user = UserService.getUserByNameAndPassword(name,password);
+                User user = userService.getUserByNameAndPassword(name,password);
                 if(user==null){
                     throw new InvalidPassedArgumentException(String.format(Message.USER_WITH_CREDENTIALS_NOT_EXISTS.getMessage(),name,password));
                 }
@@ -44,12 +51,12 @@ public class SignInSignUpController extends HttpServlet {
                 if(password.length()<6 || password.length()>30){
                     throw new InvalidPassedArgumentException(String.format(Message.PASSWORD_NOT_MATCHES_LENGTH.getMessage(),password));
                 }
-                if(UserService.getUserByName(name)!=null) {
+                if(userService.getUserByName(name)!=null) {
                     throw new InvalidPassedArgumentException(String.format(Message.NAME_ENGAGED.getMessage(),name));
                 }
-                UserService.createNewUser(name,password);
-                getServletContext().setAttribute(Constants.USER_ID, UserService.getAllUsers().size());
-                logger.info("user "+UserService.getAllUsers().size()+" registered and logged");
+                userService.createNewUser(name,password);
+                getServletContext().setAttribute(Constants.USER_ID, userService.getAllUsers().size());
+                logger.info("user "+userService.getAllUsers().size()+" registered and logged");
                 resp.sendRedirect("account");
             }
         }catch (SQLException | ClassNotFoundException e) {

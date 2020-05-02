@@ -16,10 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 public class DeleteCarController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(DeleteCarController.class);
+
+    private UserService userService = UserService.getUserService();
+
+    private CarService carService = CarService.getCarService();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if(getServletContext().getAttribute(Constants.USER_ID)==null) {
@@ -27,16 +31,16 @@ public class DeleteCarController extends HttpServlet {
         }
         Integer id = (Integer) getServletContext().getAttribute(Constants.USER_ID);
         try {
-            User user = UserService.getUserById(id);
+            User user = userService.getUserById(id);
             String carNumber = req.getParameter("carNumber").trim();
-            Car car = CarService.getCarByCarNumber(carNumber);
+            Car car = carService.getCarByCarNumber(carNumber);
             if(car==null || !car.getUserId().equals(user.getId())){
                 throw new InvalidPassedArgumentException(String.format(Message.CAR_NOT_BELONGS_TO_YOU.getMessage(),carNumber));
             }
             if(car.getParkingPlaceId()!=0){
                 throw new InvalidPassedArgumentException(String.format(Message.CAR_IS_PARKED.getMessage(),carNumber));
             }
-            CarService.deleteCar(car);
+            carService.deleteCar(car);
             logger.info("car with number " + carNumber + " deleted, user " + id);
             resp.sendRedirect("account");
         } catch (SQLException e) {

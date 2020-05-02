@@ -7,25 +7,38 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
-    public static List<User> getAllUsers() throws SQLException {
-            return UserDao.getAllUsers();
+
+    private static UserService userService = new UserService();
+
+    public static UserService getUserService() {
+        return userService;
     }
-    public static User getUserById(Integer id) throws SQLException {
-        return UserDao.getUserById(id);
+
+    private UserService(){
+
     }
-    public static User getUserByName(String name) throws SQLException{
-        return UserDao.getUserByName(name);
+
+    private UserDao userDao = UserDao.getUserDao();
+
+    public List<User> getAllUsers() throws SQLException {
+            return userDao.getAllUsers();
     }
-    public static User getUserByNameAndPassword(String name, String password) throws SQLException{
-        return UserDao.getUserByNameAndPassword(name,password);
+    public User getUserById(Integer id) throws SQLException {
+        return userDao.getUserById(id);
     }
-    public static void setUser(User user) throws SQLException {
-        UserDao.setUser(user);
+    public User getUserByName(String name) throws SQLException{
+        return userDao.getUserByName(name);
     }
-    public static void createNewUser(String name,String password) throws SQLException {
-        UserDao.createNewUser(name,password);
+    public User getUserByNameAndPassword(String name, String password) throws SQLException{
+        return userDao.getUserByNameAndPassword(name,password);
     }
-    public static void createTableIfNotExists() throws SQLException {
-        UserDao.createTableIfNotExists();
+    public void setUser(User user) throws SQLException {
+        userDao.setUser(user);
+    }
+    public void createNewUser(String name,String password) throws SQLException {
+        userDao.createNewUser(name,password);
+    }
+    public void createTableIfNotExists() throws SQLException {
+        userDao.createTableIfNotExists();
     }
 }

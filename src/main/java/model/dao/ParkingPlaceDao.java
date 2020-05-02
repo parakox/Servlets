@@ -15,7 +15,15 @@ import java.util.List;
 public class ParkingPlaceDao {
     public static Integer amount = 100;
 
-    static {
+    public static ParkingPlaceDao parkingPlace = new ParkingPlaceDao();
+
+    public static ParkingPlaceDao getParkingPlace() {
+        return parkingPlace;
+    }
+
+    private CarService carService = CarService.getCarService();
+
+    private ParkingPlaceDao(){
         try {
             createTableIfNotExists();
             for (int i = 0; i < amount; i++) {
@@ -25,7 +33,8 @@ public class ParkingPlaceDao {
             e.printStackTrace();
         }
     }
-    public static List<ParkingPlace> getAllParkingPlaces() throws SQLException {
+
+    public List<ParkingPlace> getAllParkingPlaces() throws SQLException {
         Connection connection = DriverManager.getConnection(Constants.DB_PATH);
         ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM PARKING_PLACE");
         List<ParkingPlace> parkingPlaces = new ArrayList<>();
@@ -34,7 +43,7 @@ public class ParkingPlaceDao {
         }
         return parkingPlaces;
     }
-    public static ParkingPlace getParkingPlaceById(Integer id) throws SQLException {
+    public ParkingPlace getParkingPlaceById(Integer id) throws SQLException {
         Connection connection = DriverManager.getConnection(Constants.DB_PATH);
         ResultSet resultSet = connection.createStatement().executeQuery(String.format("SELECT * FROM PARKING_PLACE WHERE ID = %d",id));
         if(resultSet.next()){
@@ -42,20 +51,20 @@ public class ParkingPlaceDao {
         }
         return null;
     }
-    public static void setParkingPlace(ParkingPlace parkingPlace) throws SQLException {
+    public void setParkingPlace(ParkingPlace parkingPlace) throws SQLException {
         Connection connection = DriverManager.getConnection(Constants.DB_PATH);
         connection.createStatement().executeUpdate(String.format("UPDATE PARKING_PLACE SET CAR_NUMBER = '%s' WHERE ID = %d",parkingPlace.getCar()==null ? "null" : parkingPlace.getCar().getCarNumber(),parkingPlace.getId()));
     }
-   public static void createTableIfNotExists() throws SQLException {
+   public void createTableIfNotExists() throws SQLException {
         Connection connection = DriverManager.getConnection(Constants.DB_PATH);
         connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS PARKING_PLACE(ID bigint auto_increment, CAR_NUMBER varchar(8))");
     }
-    private static ParkingPlace getParkingPlaceFromResultSet(ResultSet resultSet) throws SQLException {
-        Car car = CarService.getCarByCarNumber(resultSet.getString("CAR_NUMBER"));
+    private ParkingPlace getParkingPlaceFromResultSet(ResultSet resultSet) throws SQLException {
+        Car car = carService.getCarByCarNumber(resultSet.getString("CAR_NUMBER"));
         Integer id = resultSet.getInt("ID");
         return new ParkingPlace(car,id);
     }
-    private static void addNewParkingPlace(Integer id) throws SQLException {
+    private void addNewParkingPlace(Integer id) throws SQLException {
         ParkingPlace parkingPlace = new ParkingPlace(null,id);
         Connection connection = DriverManager.getConnection(Constants.DB_PATH);
         connection.createStatement().executeUpdate(String.format("INSERT into PARKING_PLACE(CAR_NUMBER) values ('%s')",parkingPlace.getCar()==null ? "null" : parkingPlace.getCar().getCarNumber()));

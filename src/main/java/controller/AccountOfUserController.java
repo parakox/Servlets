@@ -16,6 +16,9 @@ import java.sql.SQLException;
 
 public class AccountOfUserController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(AccountOfUserController.class);
+
+    private UserService userService = UserService.getUserService();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if(getServletContext().getAttribute(Constants.USER_ID)==null) {
@@ -23,7 +26,7 @@ public class AccountOfUserController extends HttpServlet {
         }
         Integer id = (Integer) getServletContext().getAttribute(Constants.USER_ID);
         try {
-            User user = UserService.getUserById(id);
+            User user = userService.getUserById(id);
             req.setAttribute("user",user);
             RequestDispatcher rd = req.getRequestDispatcher("account.jsp");
             rd.forward(req,resp);

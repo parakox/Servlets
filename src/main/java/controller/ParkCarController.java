@@ -23,6 +23,12 @@ import java.sql.SQLException;
 public class ParkCarController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(ParkCarController.class);
 
+    private UserService userService = UserService.getUserService();
+
+    private CarService carService = CarService.getCarService();
+
+    private ParkingPlaceService parkingPlaceService = ParkingPlaceService.getParkingPlaceService();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if(getServletContext().getAttribute(Constants.USER_ID)==null) {
@@ -30,14 +36,14 @@ public class ParkCarController extends HttpServlet {
         }
         Integer id = (Integer) getServletContext().getAttribute(Constants.USER_ID);
         try {
-            User user = UserService.getUserById(id);
             String carNumber = req.getParameter("carNumber").trim();
             Integer parkingPlaceId = Integer.parseInt(req.getParameter("parkingPlaceId").trim());
-            Car car = CarService.getCarByCarNumber(carNumber);
-            ParkingPlace parkingPlace = ParkingPlaceService.getParkingPlaceById(parkingPlaceId);
             if(parkingPlaceId<=0 || parkingPlaceId>ParkingPlaceDao.amount){
                 throw new InvalidPassedArgumentException(String.format(Message.WRONG_PARKING_PLACE_ID.getMessage(),parkingPlaceId));
             }
+            User user = userService.getUserById(id);
+            Car car = carService.getCarByCarNumber(carNumber);
+            ParkingPlace parkingPlace = parkingPlaceService.getParkingPlaceById(parkingPlaceId);
             if(car==null || !car.getUserId().equals(user.getId())){
                 throw new InvalidPassedArgumentException(String.format(Message.CAR_NOT_BELONGS_TO_YOU.getMessage(),carNumber));
             }
@@ -48,8 +54,8 @@ public class ParkCarController extends HttpServlet {
                 throw new InvalidPassedArgumentException(String.format(Message.PARKING_PLACE_ENGAGED.getMessage(),parkingPlaceId));
             }
             car.setParkingPlaceId(parkingPlaceId);
-            CarService.setCar(car);
-            ParkingPlaceService.setParkingPlace(new ParkingPlace(car,car.getParkingPlaceId()));
+            carService.setCar(car);
+            parkingPlaceService.setParkingPlace(new ParkingPlace(car,car.getParkingPlaceId()));
             logger.info("car with number "+carNumber+" parked at parking place "+parkingPlaceId+", user "+id);
             resp.sendRedirect("parking");
         } catch (SQLException e) {

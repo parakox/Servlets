@@ -16,6 +16,9 @@ import java.util.List;
 
 public class ParkingPlaceController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(ParkingPlaceController.class);
+
+    private ParkingPlaceService parkingPlaceService = ParkingPlaceService.getParkingPlaceService();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if(getServletContext().getAttribute(Constants.USER_ID)==null) {
@@ -23,7 +26,7 @@ public class ParkingPlaceController extends HttpServlet {
         }
         Integer id = (Integer) getServletContext().getAttribute(Constants.USER_ID);
         try {
-            List<ParkingPlace> parkingPlaceList = ParkingPlaceService.getAllParkingPlaces();
+            List<ParkingPlace> parkingPlaceList = parkingPlaceService.getAllParkingPlaces();
             req.setAttribute("parkingPlaceList",parkingPlaceList);
             RequestDispatcher rd = req.getRequestDispatcher("parking.jsp");
             rd.forward(req,resp);
