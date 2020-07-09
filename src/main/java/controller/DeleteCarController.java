@@ -1,12 +1,12 @@
 package controller;
 
-import model.entity.entity.Car;
-import model.entity.entity.Message;
-import model.entity.entity.User;
-import model.entity.exception.InvalidPassedArgumentException;
-import model.service.CarService;
-import model.entity.сonstant.Constants;
-import model.service.UserService;
+import model.entity.Car;
+import model.entity.Message;
+import model.entity.User;
+import model.exception.InvalidPassedArgumentException;
+import service.CarService;
+import model.сonstant.Constants;
+import service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,40 +20,36 @@ import java.sql.SQLException;
 public class DeleteCarController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(DeleteCarController.class);
 
-    private UserService userService = UserService.getUserService();
+    private UserService userService = UserService.getInstance();
 
-    private CarService carService = CarService.getCarService();
+    private CarService carService = CarService.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        if(getServletContext().getAttribute(Constants.USER_ID)==null) {
-            resp.sendRedirect("index.jsp");
-        }
         Integer id = (Integer) getServletContext().getAttribute(Constants.USER_ID);
-        try {
-            User user = userService.getUserById(id);
-            String carNumber = req.getParameter("carNumber").trim();
-            Car car = carService.getCarByCarNumber(carNumber);
-            if(car==null || !car.getUserId().equals(user.getId())){
-                throw new InvalidPassedArgumentException(String.format(Message.CAR_NOT_BELONGS_TO_YOU.getMessage(),carNumber));
+        if(id==null) {
+            resp.sendRedirect("index.jsp");
+        }else {
+            try {
+                String carNumber = req.getParameter("carNumber").trim();
+                User user = userService.getUserById(id);
+                Car car = carService.getCarByCarNumber(carNumber);
+                if (car == null || !car.getUserId().equals(user.getId())) {
+                    throw new InvalidPassedArgumentException(String.format(Message.CAR_NOT_BELONGS_TO_YOU.getMessage(), carNumber));
+                }
+                if (car.getParkingPlaceId() != 0) {
+                    throw new InvalidPassedArgumentException(String.format(Message.CAR_IS_PARKED.getMessage(), carNumber));
+                }
+                carService.deleteCar(car);
+                logger.info("car with number " + carNumber + " deleted, user " + id);
+                resp.sendRedirect("account");
+            } catch (SQLException | ClassNotFoundException e) {
+                logger.error("Exception, user " + id + " : " + e.getMessage());
+            } catch (InvalidPassedArgumentException | NullPointerException e) {
+                logger.info("Exception, user " + id + " : " + e.getMessage());
+                req.setAttribute("error", e.getMessage());
+                req.getRequestDispatcher("error").forward(req, resp);
             }
-            if(car.getParkingPlaceId()!=0){
-                throw new InvalidPassedArgumentException(String.format(Message.CAR_IS_PARKED.getMessage(),carNumber));
-            }
-            carService.deleteCar(car);
-            logger.info("car with number " + carNumber + " deleted, user " + id);
-            resp.sendRedirect("account");
-        } catch (SQLException e) {
-            logger.error("Exception, user "+id+" : "+ e.getMessage());
-        }catch(InvalidPassedArgumentException e){
-            logger.info("Exception, user "+id+" : "+ e.getMessage());
-            req.setAttribute("error",e.getMessage());
-            req.getRequestDispatcher("error").forward(req,resp);
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("index.jsp");
     }
 }

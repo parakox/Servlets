@@ -1,4 +1,4 @@
-<%@ page import="model.entity.entity.ParkingPlace" %>
+<%@ page import="model.entity.ParkingPlace" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %><%--
   Created by IntelliJ IDEA.

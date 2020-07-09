@@ -1,6 +1,5 @@
-package model.entity.exception;
+package model.exception;
 
-import model.entity.entity.Message;
 
 public class InvalidPassedArgumentException extends Exception {
 

@@ -1,4 +1,4 @@
-package model.entity.entity;
+package model.entity;
 
 public enum Message {
     USER_WITH_CREDENTIALS_NOT_EXISTS("no user found with this password and name, %s %s"),

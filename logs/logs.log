@@ -65,3 +65,5 @@ SELECT * FROM CAR WHERE NUMBER = 'null' [42102-200]
 SELECT * FROM USER WHERE ID = null [42102-200]
 2020-05-02T17:47:50,128 [ERROR] (UnparkCarController.java:53) - Exception, user null : Table "USER" not found; SQL statement:
 SELECT * FROM USER WHERE ID = null [42102-200]
+2020-05-27T10:58:18,520 [ERROR] (UnparkCarController.java:53) - Exception, user null : Table "USER" not found; SQL statement:
+SELECT * FROM USER WHERE ID = null [42102-200]

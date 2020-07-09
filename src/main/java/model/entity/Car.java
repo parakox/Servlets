@@ -1,6 +1,5 @@
-package model.entity.entity;
+package model.entity;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class Car {
@@ -27,7 +26,6 @@ public class Car {
     public void setName(String name) {
         this.name = name;
     }
-
 
     public Integer getUserId() {
         return userId;

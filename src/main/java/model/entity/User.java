@@ -1,4 +1,4 @@
-package model.entity.entity;
+package model.entity;
 
 import java.util.List;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package model.entity.сonstant;
+package model.сonstant;
 
 public final class Constants {
     public static final String DB_PATH = "jdbc:h2:mem:DB_CLOSE_DELAY=-1";

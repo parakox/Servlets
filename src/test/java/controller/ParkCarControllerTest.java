@@ -1,6 +1,6 @@
 package controller;
 
-import model.entity.сonstant.Constants;
+import model.сonstant.Constants;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.RequestDispatcher;
@@ -10,9 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.only;
 

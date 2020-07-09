@@ -1,0 +1,38 @@
+package service;
+
+import dao.CarDao;
+import model.entity.Car;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class CarService {
+
+    private static CarService carService = new CarService();
+
+    private CarDao carDao = CarDao.getInstance();
+
+    public static CarService getInstance() {
+        return carService;
+    }
+
+    private CarService(){
+
+    }
+
+    public Car getCarByCarNumber(String carNumber) throws SQLException, ClassNotFoundException {
+        return carDao.getCarByCarNumber(carNumber);
+    }
+    public void setCar(Car car) throws SQLException, ClassNotFoundException {
+        carDao.setCar(car);
+    }
+    public List<Car> getCarsByUserId(Integer id) throws SQLException, ClassNotFoundException {
+        return carDao.getCarsByUserId(id);
+    }
+    public void createNewCar(String carNumber, String name,Integer userId,Integer parkingPlaceId) throws SQLException, ClassNotFoundException {
+        carDao.createNewCar(carNumber,name,userId,parkingPlaceId);
+    }
+    public void deleteCar(Car car) throws SQLException, ClassNotFoundException {
+        carDao.deleteCar(car);
+    }
+}

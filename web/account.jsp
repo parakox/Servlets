@@ -1,7 +1,7 @@
-<%@ page import="model.entity.entity.Car" %>
+<%@ page import="model.entity.Car" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="model.entity.entity.User" %><%--
+<%@ page import="model.entity.User" %><%--
   Created by IntelliJ IDEA.
   User: Max
   Date: 21.04.2020
