@@ -40,7 +40,7 @@ public class AddCarController extends HttpServlet {
                     throw new InvalidPassedArgumentException(String.format(Message.CAR_NUMBER_NOT_MATCHES_LENGTH.getMessage(), number));
                 }
 
-                if (carService.getCarByCarNumber(number) != null || number.equals("null")) {
+                if (carService.getCarByCarNumber(number) != null) {
                     throw new InvalidPassedArgumentException(String.format(Message.CAR_NUMBER_ENGAGED.getMessage(), number));
                 }
                 User user = userService.getUserById(id);

@@ -30,4 +30,7 @@ public class ParkingPlaceService {
     public void setParkingPlace(ParkingPlace parkingPlace) throws SQLException, ClassNotFoundException {
         parkingPlaceDao.setParkingPlace(parkingPlace);
     }
+    public Integer getAmount(){
+        return parkingPlaceDao.getAmount();
+    }
 }

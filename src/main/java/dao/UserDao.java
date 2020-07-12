@@ -32,41 +32,41 @@ public class UserDao {
 
     public List<User> getAllUsers() throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
-        ResultSet resultSet = DatabaseService.getConnection().createStatement().executeQuery("SELECT * FROM USER");
+        ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery("SELECT * FROM USER");
         while(resultSet.next()){
             users.add(getUserFromResultSet(resultSet));
         }
         return users;
     }
     public User getUserById(Integer id) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = DatabaseService.getConnection().createStatement().executeQuery(String.format("SELECT * FROM USER WHERE ID = %d",id));
+        ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery(String.format("SELECT * FROM USER WHERE ID = %d",id));
         if(resultSet.next()){
             return getUserFromResultSet(resultSet);
         }
         return null;
     }
     public User getUserByName(String name) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = DatabaseService.getConnection().createStatement().executeQuery(String.format("SELECT * FROM USER WHERE NAME = '%s'",name));
+        ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery(String.format("SELECT * FROM USER WHERE NAME = '%s'",name));
         if(resultSet.next()){
             return getUserFromResultSet(resultSet);
         }
         return null;
     }
     public User getUserByNameAndPassword(String name, String password) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = DatabaseService.getConnection().createStatement().executeQuery(String.format("SELECT * FROM USER WHERE NAME = '%s' AND PASSWORD = '%s'",name,password));
+        ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery(String.format("SELECT * FROM USER WHERE NAME = '%s' AND PASSWORD = '%s'",name,password));
         if(resultSet.next()){
             return getUserFromResultSet(resultSet);
         }
         return null;
     }
     public void setUser(User user) throws SQLException, ClassNotFoundException {
-        DatabaseService.getConnection().createStatement().executeUpdate(String.format("UPDATE USER SET NAME = '%s', PASSWORD = '%s', WHERE ID = %d",user.getName(),user.getPassword(),user.getId()));
+        DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("UPDATE USER SET NAME = '%s', PASSWORD = '%s', WHERE ID = %d",user.getName(),user.getPassword(),user.getId()));
     }
     public void createNewUser(String name,String password) throws SQLException, ClassNotFoundException {
-        DatabaseService.getConnection().createStatement().executeUpdate(String.format("INSERT into USER(NAME,PASSWORD) values ('%s', '%s')", name, password));
+        DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("INSERT into USER(NAME,PASSWORD) values ('%s', '%s')", name, password));
     }
     private void createTableIfNotExists() throws SQLException, ClassNotFoundException {
-        DatabaseService.getConnection().createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS USER(ID bigint auto_increment, NAME varchar(30), PASSWORD varchar(30))");
+        DatabaseService.getInstance().getConnection().createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS USER(ID bigint auto_increment, NAME varchar(30), PASSWORD varchar(30))");
     }
     private User getUserFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         String name = resultSet.getString("NAME");

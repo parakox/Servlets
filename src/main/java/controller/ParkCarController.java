@@ -38,7 +38,7 @@ public class ParkCarController extends HttpServlet {
             try {
                 String carNumber = req.getParameter("carNumber").trim();
                 Integer parkingPlaceId = Integer.parseInt(req.getParameter("parkingPlaceId").trim());
-                if (parkingPlaceId <= 0 || parkingPlaceId > ParkingPlaceDao.amount) {
+                if (parkingPlaceId <= 0 || parkingPlaceId > parkingPlaceService.getAmount()) {
                     throw new InvalidPassedArgumentException(String.format(Message.WRONG_PARKING_PLACE_ID.getMessage(), parkingPlaceId));
                 }
                 User user = userService.getUserById(id);

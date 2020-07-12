@@ -1,7 +1,9 @@
 package service;
 
 import dao.UserDao;
+import model.entity.Message;
 import model.entity.User;
+import model.exception.InvalidPassedArgumentException;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -13,4 +13,9 @@
       <module name="JavaServletApp" target="13" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="JavaServletApp" options="" />
+    </option>
+  </component>
 </project>

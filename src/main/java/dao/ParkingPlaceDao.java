@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingPlaceDao {
-    public static Integer amount = 100;
+    private Integer amount = 100;
 
     public static ParkingPlaceDao parkingPlace;
 
@@ -41,7 +41,7 @@ public class ParkingPlaceDao {
     }
 
     public List<ParkingPlace> getAllParkingPlaces() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = DatabaseService.getConnection().createStatement().executeQuery("SELECT * FROM PARKING_PLACE");
+        ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery("SELECT * FROM PARKING_PLACE");
         List<ParkingPlace> parkingPlaces = new ArrayList<>();
         while(resultSet.next()){
             parkingPlaces.add(getParkingPlaceFromResultSet(resultSet));
@@ -49,25 +49,30 @@ public class ParkingPlaceDao {
         return parkingPlaces;
     }
     public ParkingPlace getParkingPlaceById(Integer id) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = DatabaseService.getConnection().createStatement().executeQuery(String.format("SELECT * FROM PARKING_PLACE WHERE ID = %d",id));
+        ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery(String.format("SELECT * FROM PARKING_PLACE WHERE ID = %d",id));
         if(resultSet.next()){
             return getParkingPlaceFromResultSet(resultSet);
         }
         return null;
     }
     public void setParkingPlace(ParkingPlace parkingPlace) throws SQLException, ClassNotFoundException {
-        DatabaseService.getConnection().createStatement().executeUpdate(String.format("UPDATE PARKING_PLACE SET CAR_NUMBER = '%s' WHERE ID = %d",parkingPlace.getCar()==null ? "null" : parkingPlace.getCar().getCarNumber(),parkingPlace.getId()));
+        DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("UPDATE PARKING_PLACE SET CAR_NUMBER = '%s' WHERE ID = %d",parkingPlace.getCar()==null ? "null" : parkingPlace.getCar().getCarNumber(),parkingPlace.getId()));
     }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
     private ParkingPlace getParkingPlaceFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         Car car = carService.getCarByCarNumber(resultSet.getString("CAR_NUMBER"));
         Integer id = resultSet.getInt("ID");
         return new ParkingPlace(car,id);
     }
     private void createTableIfNotExists() throws SQLException, ClassNotFoundException {
-        DatabaseService.getConnection().createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS PARKING_PLACE(ID bigint auto_increment, CAR_NUMBER varchar(8))");
+        DatabaseService.getInstance().getConnection().createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS PARKING_PLACE(ID bigint auto_increment, CAR_NUMBER varchar(8))");
     }
     private void addNewParkingPlace(Integer id) throws SQLException, ClassNotFoundException {
         ParkingPlace parkingPlace = new ParkingPlace(null,id);
-        DatabaseService.getConnection().createStatement().executeUpdate(String.format("INSERT into PARKING_PLACE(CAR_NUMBER) values ('%s')",parkingPlace.getCar()==null ? "null" : parkingPlace.getCar().getCarNumber()));
+        DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("INSERT into PARKING_PLACE(CAR_NUMBER) values ('%s')",parkingPlace.getCar()==null ? "null" : parkingPlace.getCar().getCarNumber()));
     }
 }

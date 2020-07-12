@@ -67,3 +67,42 @@ SELECT * FROM USER WHERE ID = null [42102-200]
 SELECT * FROM USER WHERE ID = null [42102-200]
 2020-05-27T10:58:18,520 [ERROR] (UnparkCarController.java:53) - Exception, user null : Table "USER" not found; SQL statement:
 SELECT * FROM USER WHERE ID = null [42102-200]
+2020-07-12T18:07:44,603 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:07:44,697 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:07:44,708 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:08:32,406 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:08:32,491 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:08:32,503 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:10:16,294 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:10:16,395 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:10:16,433 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:11:50,446 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:11:50,566 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:11:50,601 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:12:27,827 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:12:27,898 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:12:27,919 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:12:45,464 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:12:45,582 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:12:45,637 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:16:12,802 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:16:12,893 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:16:12,922 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:24:42,700 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:24:42,841 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:24:42,880 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:29:21,994 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:29:22,148 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:29:22,182 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:31:49,829 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:31:49,931 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:31:49,982 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:38:09,562 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:38:09,642 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:38:09,673 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:45:11,340 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:45:11,450 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:45:11,489 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
+2020-07-12T18:48:50,928 [INFO ] (AddCarController.java:53) - Exception, user 1 : car number should have length between 1 and 8, 123123123231
+2020-07-12T18:48:51,103 [INFO ] (ParkCarController.java:64) - Exception, user 1 : wrong parking place id, -1
+2020-07-12T18:48:51,139 [INFO ] (SignInSignUpController.java:56) - Exception : name should have length between 6 and 30, fgfg
