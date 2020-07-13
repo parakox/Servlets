@@ -15,6 +15,7 @@ import java.io.IOException;
 import static org.mockito.Mockito.*;
 
 class AddCarControllerTest {
+    private AddCarController addCarController = new AddCarController();
 
     @Test
     void doPost() throws IOException, ServletException {
@@ -28,7 +29,6 @@ class AddCarControllerTest {
         when(sg.getServletContext()).thenReturn(servletContext);
         when(servletContext.getAttribute(Constants.USER_ID)).thenReturn(1);
         when(req.getRequestDispatcher("error")).thenReturn(requestDispatcher);
-        AddCarController addCarController = new AddCarController();
         addCarController.init(sg);
         addCarController.doPost(req, resp);
         verify(requestDispatcher,only()).forward(req,resp);

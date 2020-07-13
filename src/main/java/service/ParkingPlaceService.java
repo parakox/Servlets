@@ -20,17 +20,25 @@ public class ParkingPlaceService {
 
     }
 
-
-    public List<ParkingPlace> getAllParkingPlaces() throws SQLException, ClassNotFoundException {
+    public List<ParkingPlace> getAllParkingPlaces() throws SQLException {
         return parkingPlaceDao.getAllParkingPlaces();
     }
-    public ParkingPlace getParkingPlaceById(Integer id) throws SQLException, ClassNotFoundException {
+    public ParkingPlace getParkingPlaceById(Integer id) throws SQLException {
         return parkingPlaceDao.getParkingPlaceById(id);
     }
-    public void setParkingPlace(ParkingPlace parkingPlace) throws SQLException, ClassNotFoundException {
+    public void setParkingPlace(ParkingPlace parkingPlace) throws SQLException {
         parkingPlaceDao.setParkingPlace(parkingPlace);
     }
     public Integer getAmount(){
         return parkingPlaceDao.getAmount();
+    }
+    public void createTableIfNotExists() throws SQLException {
+        parkingPlaceDao.createTableIfNotExists();
+    }
+    public void dropTable() throws SQLException {
+        parkingPlaceDao.dropTable();
+    }
+    public void init() throws SQLException {
+        parkingPlaceDao.init();
     }
 }

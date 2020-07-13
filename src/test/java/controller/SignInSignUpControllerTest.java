@@ -14,6 +14,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.only;
 
 class SignInSignUpControllerTest {
+    private SignInSignUpController signInSignUpController = new SignInSignUpController();
 
     @Test
     void doPost() throws ServletException, IOException {
@@ -25,7 +26,6 @@ class SignInSignUpControllerTest {
         when(req.getParameter("name")).thenReturn("fgfg");
         when(req.getParameter("password")).thenReturn("dsfsdsdfdfs");
         when(req.getRequestDispatcher("error")).thenReturn(requestDispatcher);
-        SignInSignUpController signInSignUpController = new SignInSignUpController();
         signInSignUpController.init(sg);
         signInSignUpController.doPost(req, resp);
         verify(requestDispatcher,only()).forward(req,resp);

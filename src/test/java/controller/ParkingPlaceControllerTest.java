@@ -15,6 +15,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.only;
 
 class ParkingPlaceControllerTest {
+    private ParkingPlaceController parkingPlaceController = new ParkingPlaceController();
 
     @Test
     void doGet() throws ServletException, IOException {
@@ -24,7 +25,6 @@ class ParkingPlaceControllerTest {
         ServletConfig sg = mock(ServletConfig.class);
         when(sg.getServletContext()).thenReturn(servletContext);
         when(servletContext.getAttribute(Constants.USER_ID)).thenReturn(null);
-        ParkingPlaceController parkingPlaceController = new ParkingPlaceController();
         parkingPlaceController.init(sg);
         parkingPlaceController.doGet(req, resp);
         verify(resp,only()).sendRedirect("index.jsp");

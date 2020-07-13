@@ -1,6 +1,5 @@
 package controller;
 
-import dao.ParkingPlaceDao;
 import model.entity.Car;
 import model.entity.Message;
 import model.entity.ParkingPlace;
@@ -58,7 +57,7 @@ public class ParkCarController extends HttpServlet {
                 parkingPlaceService.setParkingPlace(new ParkingPlace(car, car.getParkingPlaceId()));
                 logger.info("car with number " + carNumber + " parked at parking place " + parkingPlaceId + ", user " + id);
                 resp.sendRedirect("parking");
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (SQLException e) {
                 logger.error("Exception, user " + id + " : " + e.getMessage());
             } catch (InvalidPassedArgumentException | NullPointerException e) {
                 logger.info("Exception, user " + id + " : " + e.getMessage());

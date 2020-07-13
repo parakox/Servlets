@@ -30,7 +30,7 @@ public class AccountOfUserController extends HttpServlet {
                 req.setAttribute("user", user);
                 RequestDispatcher rd = req.getRequestDispatcher("account.jsp");
                 rd.forward(req, resp);
-            } catch (SQLException | ServletException | ClassNotFoundException e) {
+            } catch (SQLException | ServletException e) {
                 logger.error("Exception, user " + id + " : " + e.getMessage());
             }
         }

@@ -15,7 +15,7 @@ public class UserDao {
     static {
         try {
             userDao = new UserDao();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -24,13 +24,13 @@ public class UserDao {
         return userDao;
     }
 
-    private UserDao() throws SQLException, ClassNotFoundException {
+    private UserDao() throws SQLException {
         createTableIfNotExists();
     }
 
     private CarService carService = CarService.getInstance();
 
-    public List<User> getAllUsers() throws SQLException, ClassNotFoundException {
+    public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery("SELECT * FROM USER");
         while(resultSet.next()){
@@ -38,37 +38,40 @@ public class UserDao {
         }
         return users;
     }
-    public User getUserById(Integer id) throws SQLException, ClassNotFoundException {
+    public User getUserById(Integer id) throws SQLException {
         ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery(String.format("SELECT * FROM USER WHERE ID = %d",id));
         if(resultSet.next()){
             return getUserFromResultSet(resultSet);
         }
         return null;
     }
-    public User getUserByName(String name) throws SQLException, ClassNotFoundException {
+    public User getUserByName(String name) throws SQLException {
         ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery(String.format("SELECT * FROM USER WHERE NAME = '%s'",name));
         if(resultSet.next()){
             return getUserFromResultSet(resultSet);
         }
         return null;
     }
-    public User getUserByNameAndPassword(String name, String password) throws SQLException, ClassNotFoundException {
+    public User getUserByNameAndPassword(String name, String password) throws SQLException {
         ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery(String.format("SELECT * FROM USER WHERE NAME = '%s' AND PASSWORD = '%s'",name,password));
         if(resultSet.next()){
             return getUserFromResultSet(resultSet);
         }
         return null;
     }
-    public void setUser(User user) throws SQLException, ClassNotFoundException {
-        DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("UPDATE USER SET NAME = '%s', PASSWORD = '%s', WHERE ID = %d",user.getName(),user.getPassword(),user.getId()));
+    public void setUser(User user) throws SQLException {
+        DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("UPDATE USER SET NAME = '%s', PASSWORD = '%s' WHERE ID = %d",user.getName(),user.getPassword(),user.getId()));
     }
-    public void createNewUser(String name,String password) throws SQLException, ClassNotFoundException {
+    public void createNewUser(String name,String password) throws SQLException {
         DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("INSERT into USER(NAME,PASSWORD) values ('%s', '%s')", name, password));
     }
-    private void createTableIfNotExists() throws SQLException, ClassNotFoundException {
+    public void dropTable() throws SQLException {
+        DatabaseService.getInstance().getConnection().createStatement().execute("DROP TABLE USER");
+    }
+    public void createTableIfNotExists() throws SQLException {
         DatabaseService.getInstance().getConnection().createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS USER(ID bigint auto_increment, NAME varchar(30), PASSWORD varchar(30))");
     }
-    private User getUserFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
+    private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
         String name = resultSet.getString("NAME");
         String password = resultSet.getString("PASSWORD");
         Integer id = resultSet.getInt("ID");

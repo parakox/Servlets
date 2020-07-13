@@ -30,7 +30,7 @@ public class ParkingPlaceController extends HttpServlet {
                 req.setAttribute("parkingPlaceList", parkingPlaceList);
                 RequestDispatcher rd = req.getRequestDispatcher("parking.jsp");
                 rd.forward(req, resp);
-            } catch (SQLException | ServletException | ClassNotFoundException e) {
+            } catch (SQLException | ServletException e) {
                 logger.error("Exception, user " + id + " : " + e.getMessage());
             }
         }

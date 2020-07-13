@@ -49,7 +49,7 @@ public class SignInSignUpController extends HttpServlet {
                 logger.info("user "+userService.getAllUsers().size()+" registered and logged");
                 resp.sendRedirect("account");
             }
-        }catch (SQLException | ClassNotFoundException e) {
+        }catch (SQLException e) {
             logger.error("Exception at logging or signing up "+ e.getMessage());
             resp.sendRedirect("index.jsp");
         }catch(InvalidPassedArgumentException | NullPointerException e){

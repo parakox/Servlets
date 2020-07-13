@@ -40,14 +40,14 @@ public class AddCarController extends HttpServlet {
                     throw new InvalidPassedArgumentException(String.format(Message.CAR_NUMBER_NOT_MATCHES_LENGTH.getMessage(), number));
                 }
 
-                if (carService.getCarByCarNumber(number) != null) {
+                if (carService.getCarByCarNumber(number) != null || number.equals("null")) {
                     throw new InvalidPassedArgumentException(String.format(Message.CAR_NUMBER_ENGAGED.getMessage(), number));
                 }
                 User user = userService.getUserById(id);
                 carService.createNewCar(number, name, user.getId(), null);
                 logger.info("new car with number " + number + " created, user " + id);
                 resp.sendRedirect("account");
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (SQLException e) {
                 logger.error("Exception, user " + id + " : " + e.getMessage());
             } catch (InvalidPassedArgumentException | NullPointerException e) {
                 logger.info("Exception, user " + id + " : " + e.getMessage());

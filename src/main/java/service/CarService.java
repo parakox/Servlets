@@ -20,19 +20,25 @@ public class CarService {
 
     }
 
-    public Car getCarByCarNumber(String carNumber) throws SQLException, ClassNotFoundException {
+    public Car getCarByCarNumber(String carNumber) throws SQLException {
         return carDao.getCarByCarNumber(carNumber);
     }
-    public void setCar(Car car) throws SQLException, ClassNotFoundException {
+    public void setCar(Car car) throws SQLException {
         carDao.setCar(car);
     }
-    public List<Car> getCarsByUserId(Integer id) throws SQLException, ClassNotFoundException {
+    public List<Car> getCarsByUserId(Integer id) throws SQLException {
         return carDao.getCarsByUserId(id);
     }
-    public void createNewCar(String carNumber, String name,Integer userId,Integer parkingPlaceId) throws SQLException, ClassNotFoundException {
+    public void createNewCar(String carNumber, String name,Integer userId,Integer parkingPlaceId) throws SQLException {
         carDao.createNewCar(carNumber,name,userId,parkingPlaceId);
     }
-    public void deleteCar(Car car) throws SQLException, ClassNotFoundException {
+    public void deleteCar(Car car) throws SQLException {
         carDao.deleteCar(car);
+    }
+    public void createTableIfNotExists() throws SQLException {
+        carDao.createTableIfNotExists();
+    }
+    public void dropTable() throws SQLException {
+        carDao.dropTable();
     }
 }

@@ -43,7 +43,7 @@ public class DeleteCarController extends HttpServlet {
                 carService.deleteCar(car);
                 logger.info("car with number " + carNumber + " deleted, user " + id);
                 resp.sendRedirect("account");
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (SQLException e) {
                 logger.error("Exception, user " + id + " : " + e.getMessage());
             } catch (InvalidPassedArgumentException | NullPointerException e) {
                 logger.info("Exception, user " + id + " : " + e.getMessage());

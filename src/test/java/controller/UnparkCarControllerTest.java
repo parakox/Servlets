@@ -15,6 +15,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.only;
 
 class UnparkCarControllerTest {
+    private UnparkCarController unparkCarController = new UnparkCarController();
 
     @Test
     void doPost() throws ServletException, IOException {
@@ -24,7 +25,6 @@ class UnparkCarControllerTest {
         ServletConfig sg = mock(ServletConfig.class);
         when(sg.getServletContext()).thenReturn(servletContext);
         when(servletContext.getAttribute(Constants.USER_ID)).thenReturn(null);
-        UnparkCarController unparkCarController = new UnparkCarController();
         unparkCarController.init(sg);
         unparkCarController.doPost(req, resp);
         verify(resp,only()).sendRedirect("index.jsp");

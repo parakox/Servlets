@@ -49,7 +49,7 @@ public class UnparkCarController extends HttpServlet {
                 carService.setCar(car);
                 logger.info("car with number " + carNumber + " unparked, user " + id);
                 resp.sendRedirect("parking");
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (SQLException e) {
                 logger.error("Exception, user " + id + " : " + e.getMessage());
             } catch (InvalidPassedArgumentException | NullPointerException e) {
                 logger.info("Exception, user " + id + " : " + e.getMessage());

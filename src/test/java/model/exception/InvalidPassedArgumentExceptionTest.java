@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class InvalidPassedArgumentExceptionTest {
 
     @Test
-    public void testInvalidPassedArgumentException() {
+    void getMessage() {
         try {
             throw new InvalidPassedArgumentException(Message.NAME_NOT_MATCHES_LENGTH.getMessage());
         } catch (InvalidPassedArgumentException e) {

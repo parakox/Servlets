@@ -15,6 +15,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.only;
 
 class AccountOfUserControllerTest {
+    private AccountOfUserController accountOfUserController = new AccountOfUserController();
 
     @Test
     void doGet() throws IOException, ServletException {
@@ -24,7 +25,6 @@ class AccountOfUserControllerTest {
         ServletConfig sg = mock(ServletConfig.class);
         when(sg.getServletContext()).thenReturn(servletContext);
         when(servletContext.getAttribute(Constants.USER_ID)).thenReturn(null);
-        AccountOfUserController accountOfUserController = new AccountOfUserController();
         accountOfUserController.init(sg);
         accountOfUserController.doGet(req, resp);
         verify(resp,only()).sendRedirect("index.jsp");

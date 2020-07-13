@@ -14,7 +14,7 @@ public class CarDao {
     static {
         try {
             carDao = new CarDao();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -24,11 +24,11 @@ public class CarDao {
         return carDao;
     }
 
-    private CarDao() throws SQLException, ClassNotFoundException {
+    private CarDao() throws SQLException {
         createTableIfNotExists();
     }
 
-    public List<Car> getCarsByUserId(Integer id) throws SQLException, ClassNotFoundException {
+    public List<Car> getCarsByUserId(Integer id) throws SQLException {
         ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery(String.format("SELECT * FROM CAR WHERE USER_ID = %d",id));
         List<Car> cars = new ArrayList<>();
         while(resultSet.next()){
@@ -36,25 +36,28 @@ public class CarDao {
         }
         return cars;
     }
-    public Car getCarByCarNumber(String carNumber) throws SQLException, ClassNotFoundException {
+    public Car getCarByCarNumber(String carNumber) throws SQLException {
         ResultSet resultSet = DatabaseService.getInstance().getConnection().createStatement().executeQuery(String.format("SELECT * FROM CAR WHERE NUMBER = '%s'",carNumber));
         if(resultSet.next()){
             return getCarFromResultSet(resultSet);
         }
         return null;
     }
-    public void setCar(Car car) throws SQLException, ClassNotFoundException {
+    public void setCar(Car car) throws SQLException {
         DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("UPDATE CAR SET NAME = '%s', USER_ID = %d, PARKING_PLACE_ID = %d WHERE NUMBER = '%s'",car.getName(),car.getUserId(),car.getParkingPlaceId(),car.getCarNumber()));
     }
-    public void createNewCar(String carNumber,String name,Integer userId,Integer parkingPlaceId) throws SQLException, ClassNotFoundException {
+    public void createNewCar(String carNumber,String name,Integer userId,Integer parkingPlaceId) throws SQLException {
         Car car = new Car(carNumber,name,userId,parkingPlaceId);
         DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("INSERT into CAR(NUMBER, NAME, USER_ID, PARKING_PLACE_ID) values ('%s', '%s', %d, %d)",car.getCarNumber(),car.getName(),car.getUserId(),car.getParkingPlaceId()));
     }
-    public void deleteCar(Car car) throws SQLException, ClassNotFoundException {
+    public void deleteCar(Car car) throws SQLException {
         String carNumber = car.getCarNumber();
         DatabaseService.getInstance().getConnection().createStatement().executeUpdate(String.format("DELETE FROM CAR WHERE NUMBER = '%s'",carNumber));
     }
-    private void createTableIfNotExists() throws SQLException, ClassNotFoundException {
+    public void dropTable() throws SQLException {
+        DatabaseService.getInstance().getConnection().createStatement().execute("DROP TABLE CAR");
+    }
+    public void createTableIfNotExists() throws SQLException {
         DatabaseService.getInstance().getConnection().createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS CAR(NUMBER varchar(8), NAME varchar(30), USER_ID int, PARKING_PLACE_ID int)");
     }
     private Car getCarFromResultSet(ResultSet resultSet) throws SQLException {
