@@ -4,6 +4,7 @@ import model.entity.Message;
 import model.entity.User;
 import model.exception.InvalidPassedArgumentException;
 import model.сonstant.Constants;
+import service.AbstractUserService;
 import service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,7 @@ import java.sql.*;
 public class SignInSignUpController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(SignInSignUpController.class);
 
-    private UserService userService = UserService.getInstance();
+    private AbstractUserService userService = UserService.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

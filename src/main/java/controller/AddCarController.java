@@ -3,6 +3,8 @@ package controller;
 import model.entity.Message;
 import model.entity.User;
 import model.exception.InvalidPassedArgumentException;
+import service.AbstractCarService;
+import service.AbstractUserService;
 import service.CarService;
 import model.сonstant.Constants;
 import service.UserService;
@@ -19,9 +21,9 @@ import java.sql.SQLException;
 public class AddCarController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(AddCarController.class);
 
-    private UserService userService = UserService.getInstance();
+    private AbstractUserService userService = UserService.getInstance();
 
-    private CarService carService = CarService.getInstance();
+    private AbstractCarService carService = CarService.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

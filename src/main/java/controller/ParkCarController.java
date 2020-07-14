@@ -6,9 +6,7 @@ import model.entity.ParkingPlace;
 import model.entity.User;
 import model.exception.InvalidPassedArgumentException;
 import model.сonstant.Constants;
-import service.CarService;
-import service.ParkingPlaceService;
-import service.UserService;
+import service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,11 +20,11 @@ import java.sql.SQLException;
 public class ParkCarController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(ParkCarController.class);
 
-    private UserService userService = UserService.getInstance();
+    private AbstractUserService userService = UserService.getInstance();
 
-    private CarService carService = CarService.getInstance();
+    private AbstractCarService carService = CarService.getInstance();
 
-    private ParkingPlaceService parkingPlaceService = ParkingPlaceService.getInstance();
+    private AbstractParkingPlaceService parkingPlaceService = ParkingPlaceService.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

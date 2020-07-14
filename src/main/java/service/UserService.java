@@ -1,25 +1,24 @@
 package service;
 
+import dao.AbstractUserDao;
 import dao.UserDao;
-import model.entity.Message;
 import model.entity.User;
-import model.exception.InvalidPassedArgumentException;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserService {
+public class UserService implements AbstractUserService{
 
-    private static UserService userService = new UserService();
+    private static UserService userService = new UserService(UserDao.getInstance());
 
-    private UserDao userDao = UserDao.getInstance();
+    private AbstractUserDao userDao;
 
     public static UserService getInstance() {
         return userService;
     }
 
-    private UserService(){
-
+    private UserService(AbstractUserDao userDao){
+        this.userDao=userDao;
     }
 
     public List<User> getAllUsers() throws SQLException {

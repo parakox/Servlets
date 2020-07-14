@@ -1,6 +1,7 @@
 package controller;
 import model.entity.ParkingPlace;
 import model.сonstant.Constants;
+import service.AbstractParkingPlaceService;
 import service.ParkingPlaceService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ParkingPlaceController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(ParkingPlaceController.class);
 
-    private ParkingPlaceService parkingPlaceService = ParkingPlaceService.getInstance();
+    private AbstractParkingPlaceService parkingPlaceService = ParkingPlaceService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

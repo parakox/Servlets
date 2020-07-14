@@ -1,23 +1,24 @@
 package service;
 
+import dao.AbstractParkingPlaceDao;
 import dao.ParkingPlaceDao;
 import model.entity.ParkingPlace;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class ParkingPlaceService {
+public class ParkingPlaceService implements AbstractParkingPlaceService {
 
-    private static ParkingPlaceService parkingPlaceService = new ParkingPlaceService();
+    private static ParkingPlaceService parkingPlaceService = new ParkingPlaceService(ParkingPlaceDao.getInstance());
 
-    private ParkingPlaceDao parkingPlaceDao = ParkingPlaceDao.getInstance();
+    private AbstractParkingPlaceDao parkingPlaceDao;
 
     public static ParkingPlaceService getInstance() {
         return parkingPlaceService;
     }
 
-    private ParkingPlaceService(){
-
+    private ParkingPlaceService(AbstractParkingPlaceDao parkingPlaceDao){
+        this.parkingPlaceDao = parkingPlaceDao;
     }
 
     public List<ParkingPlace> getAllParkingPlaces() throws SQLException {

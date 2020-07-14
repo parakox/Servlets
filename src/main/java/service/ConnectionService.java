@@ -7,12 +7,12 @@ import java.sql.SQLException;
 import static model.сonstant.Constants.DB_PATH;
 import static model.сonstant.Constants.JDBC_DRIVER;
 
-public class DatabaseService {
-    private static DatabaseService databaseService;
+public class ConnectionService {
+    private static ConnectionService databaseService;
 
     static {
         try {
-            databaseService = new DatabaseService();
+            databaseService = new ConnectionService();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -20,10 +20,10 @@ public class DatabaseService {
 
     private Connection connection;
 
-    public static DatabaseService getInstance(){
+    public static ConnectionService getInstance(){
         return databaseService;
     }
-    private DatabaseService() throws ClassNotFoundException, SQLException {
+    private ConnectionService() throws ClassNotFoundException, SQLException {
         Class.forName(JDBC_DRIVER);
         connection = DriverManager.getConnection(DB_PATH);
     }

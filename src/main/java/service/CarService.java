@@ -1,22 +1,24 @@
 package service;
 
+import dao.AbstractCarDao;
 import dao.CarDao;
 import model.entity.Car;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class CarService {
+public class CarService implements AbstractCarService{
 
-    private static CarService carService = new CarService();
+    private static CarService carService = new CarService(CarDao.getInstance());
 
-    private CarDao carDao = CarDao.getInstance();
+    private AbstractCarDao carDao;
 
     public static CarService getInstance() {
         return carService;
     }
 
-    private CarService(){
+    private CarService(AbstractCarDao carDao){
+       this.carDao = carDao;
 
     }
 

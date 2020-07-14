@@ -2,6 +2,7 @@ package controller;
 
 import model.entity.User;
 import model.сonstant.Constants;
+import service.AbstractUserService;
 import service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 public class AccountOfUserController extends HttpServlet {
     final static Logger logger = LogManager.getLogger(AccountOfUserController.class);
 
-    private UserService userService = UserService.getInstance();
+    private AbstractUserService userService = UserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
